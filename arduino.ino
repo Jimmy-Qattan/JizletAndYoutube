@@ -5,7 +5,10 @@ BLECharCharacteristic characteristic("488b392b-97eb-4d6a-9715-1fbc4b202cbe", BLE
 
 BLEStringCharacteristic ledCharacteristic("216978d7-d887-4ad4-bb02-1bc00e39f3d9", BLERead | BLEWrite | BLENotify, 20);
 
-unsigned long timeStamp;
+bool buttonADown = false;
+bool buttonBDown = false;
+bool buttonCDown = false;
+bool buttonDDown = false;
 
 void setup()
 {
@@ -50,32 +53,61 @@ void loop()
   if (digitalRead(2) == HIGH) {
     Serial.println("D");
 
-
-    if (BLE.connected()) {
-      characteristic.writeValue('D');
+    if (buttonDDown == false) {
+      buttonDDown = true;
+      
+      if (BLE.connected()) {
+        characteristic.writeValue('D');
+      }
+      
     }
-  } 
+  } else {
+    buttonDDown = false;
+  }
+  
   if (digitalRead(3) == HIGH) {
     Serial.println("B");
 
-    if (BLE.connected()) {
-      characteristic.writeValue('B');
+    if (buttonBDown == false) {
+      buttonBDown = true;
+      
+      if (BLE.connected()) {
+        characteristic.writeValue('B');
+      }
+      
     }
-  } 
+  } else {
+    buttonBDown = false;
+  }
+
   if (digitalRead(4) == HIGH) {
     Serial.println("C");
 
-    if (BLE.connected()) {
-      characteristic.writeValue('C');
+    if (buttonCDown == false) {
+      buttonCDown = true;
+      
+      if (BLE.connected()) {
+        characteristic.writeValue('C');
+      }
+      
     }
-  } 
+  } else {
+    buttonCDown = false;
+  }
+  
   if (digitalRead(5) == HIGH) {
     Serial.println("A");
 
-    if (BLE.connected()) {
-      characteristic.writeValue('A');
-      Serial.println("YESSS");
+    if (buttonADown == false) {
+      buttonADown = true;
+      
+      if (BLE.connected()) {
+        characteristic.writeValue('A');
+      }
+      
     }
+  } else {
+    buttonADown = false;
   }
 
   if (BLE.connected()) {
