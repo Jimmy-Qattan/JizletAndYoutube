@@ -13,6 +13,7 @@ bool buttonDDown = false;
 void setup()
 {
   Serial.begin(9600);
+  Serial.println("aight");
 
 
   service.addCharacteristic(characteristic);
@@ -20,7 +21,6 @@ void setup()
 
   if (!BLE.begin()) {
     Serial.println("Connect NOW!");
-
   }
 
   BLE.setLocalName("Game Controller 1");
@@ -56,9 +56,10 @@ void loop()
     if (buttonDDown == false) {
       buttonDDown = true;
       
-      if (BLE.connected()) {
+      //if (BLE.connected()) {
         characteristic.writeValue('D');
-      }
+        Serial.println("D pressed");
+      //}
       
     }
   } else {
@@ -71,9 +72,10 @@ void loop()
     if (buttonBDown == false) {
       buttonBDown = true;
       
-      if (BLE.connected()) {
+      //if (BLE.connected()) {
         characteristic.writeValue('B');
-      }
+        Serial.println("B pressed");
+      //}
       
     }
   } else {
@@ -86,9 +88,10 @@ void loop()
     if (buttonCDown == false) {
       buttonCDown = true;
       
-      if (BLE.connected()) {
+      //if (BLE.connected()) {
         characteristic.writeValue('C');
-      }
+        Serial.println("C pressed");
+      //}
       
     }
   } else {
@@ -101,9 +104,10 @@ void loop()
     if (buttonADown == false) {
       buttonADown = true;
       
-      if (BLE.connected()) {
+      //if (BLE.connected()) {
         characteristic.writeValue('A');
-      }
+        Serial.println("A pressed");
+      //}
       
     }
   } else {
