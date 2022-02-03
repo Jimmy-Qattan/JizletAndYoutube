@@ -15,17 +15,25 @@ let led;
 
 navigator.bluetooth.requestDevice({filters: [{services: [serviceUUID]}]}).then(_device => {
     device = _device;
+    console.log(1);
     return device.gatt.connect();
+    
 }).then(() => {
+    console.log(2);
     return device.gatt.getPrimaryService(serviceUUID); 
 }).then(_service => {
     service = _service;
+    console.log(3);
     return service.getCharacteristic(ledCharacteristic);
 }).then(_led => {
+    console.log(4);
     led = _led;
+    led.startNotifications();
 }).then(() => {
+    console.log(5);
     return service.getCharacteristic(characteristicUUID);
 }).then(_characteristic => {
+    console.log("yay");
     
     let decoder = new TextDecoder();
     let encoder = new TextEncoder();
@@ -42,26 +50,28 @@ navigator.bluetooth.requestDevice({filters: [{services: [serviceUUID]}]}).then(_
     
     characteristic.addEventListener("characteristicvaluechanged", function data(thing) {
         //let decoder = new TextDecoder();
+        console.log("hmmmmmm");
         //let encoder = new TextEncoder();
         let result = decoder.decode(thing.target.value);
+        console.log(result);
         
-        if (result == "A") {
+        if (result == 'A') {
             Array.from(document.getElementsByClassName("video-stream html5-main-video"))[0].currentTime = Array.from(document.getElementsByClassName("video-stream html5-main-video"))[0].currentTime + 5;
-        } else if (result == "B") {
+        } else if (result == 'B') {
             Array.from(document.getElementsByClassName("video-stream html5-main-video"))[0].currentTime = Array.from(document.getElementsByClassName("video-stream html5-main-video"))[0].currentTime - 5;
-        } else if (result == "C") {
-            Array.from(document.getElementsByClassName("ytp-play-button ytp-button"))[1].click();
+        } else if (result == 'C') {
+            Array.from(document.getElementsByClassName("ytp-play-button ytp-button"))[0].click();
             
             if (Array.from(document.getElementsByClassName("video-stream html5-main-video"))[0]) {
-                if (Array.from(document.getElementsByClassName("video-stream html5-main-video"))[0].paused === false) {
+                if (Array.from(document.getElementsByClassName("video-stream html5-main-video"))[0].paused === true) {
                     led.writeValue(encoder.encode("notpaused"));
-                } else if (Array.from(document.getElementsByClassName("video-stream html5-main-video"))[0].paused === true) {
+                } else if (Array.from(document.getElementsByClassName("video-stream html5-main-video"))[0].paused === false) {
                     led.writeValue(encoder.encode("paused"));
                 }
             }
             
-        } else if (result == "D") {
-            Array.from(document.getElementsByClassName("ytp-fullscreen-button ytp-button"))[1].click();
+        } else if (result == 'D') {
+            Array.from(document.getElementsByClassName("ytp-size-button ytp-button"))[0].click();
             
             led.writeValue(encoder.encode("enterfullscreen"));
             
@@ -76,5 +86,7 @@ navigator.bluetooth.requestDevice({filters: [{services: [serviceUUID]}]}).then(_
             });
             
         }
+        
     });
+    return characteristic.startNotifications();
 });
